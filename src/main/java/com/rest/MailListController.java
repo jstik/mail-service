@@ -1,8 +1,12 @@
 package com.rest;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dao.MailItemRepository;
 import com.google.common.collect.Lists;
 import com.model.entity.MailItem;
+import com.model.entity.QMailItem;
+import com.querydsl.core.types.ExpressionUtils;
 import com.rest.filter.Column;
 
 /**
@@ -22,8 +28,9 @@ import com.rest.filter.Column;
  */
 @Controller
 public class MailListController {
+	private static Log logger = LogFactory.getLog(MailListController.class);
     @Autowired
-    MailItemRepository mailItemRepository;
+	private MailItemRepository mailItemRepository;
 
     /*@RequestMapping("/")
     public Object test(){
@@ -34,16 +41,32 @@ public class MailListController {
         return "/index.html";
     }
 
-    @RequestMapping(value = "/mails/mails.json", consumes = "application/json")
+	@RequestMapping(value = "/mails/mails.json")
     public @ResponseBody Object getMails(@RequestParam(name = "filter") String filter ) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayNode arrayNode = objectMapper.readValue(filter, ArrayNode.class);
         List<Column> columns = Column.getColumns(arrayNode, MailItem.class);
-
+		Collection<com.querydsl.core.types.Predicate> predicates = columns.stream().map(c -> {
+			try {
+				return (com.querydsl.core.types.Predicate) c.getPredicate(QMailItem.mailItem);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				logger.error("Couldn't create predicate", e);
+				return null;
+			}
+		}).filter(ex -> ex != null).collect(Collectors.toList());
+		PageRequest pageable = new PageRequest(0, 30);
+		Iterable<MailItem> all;
+		if (predicates.isEmpty()) {
+			all = mailItemRepository.findAll(pageable);
+		} else {
+			all = mailItemRepository.findAll(ExpressionUtils.allOf(predicates), pageable);
+		}
         MailListResponse response = new MailListResponse();
-        Iterable<MailItem> all = mailItemRepository.findAll();
+		/* QMailItem qMailItem = QMailItem.mailItem; */
+		/* qMailItem.mailStatus().status.eq(right) */
 
-        PageRequest pageable = new PageRequest(0, 30);
+
       /*  Predicate predicate  = BooleanExpression.allOf()
         mailItemRepository.findAll()*/
         response.setData(Lists.newArrayList(all));

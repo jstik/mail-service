@@ -338,6 +338,7 @@
 			</dependency> -->
 
 
+		
 	</dependencies>
 	<build>
 		<resources>
@@ -374,7 +375,7 @@
 							<goal>process</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target/generated-sources/mysema</outputDirectory>
+							<outputDirectory>src/generated</outputDirectory>
 							<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
 							<showWarnings>true</showWarnings>
 

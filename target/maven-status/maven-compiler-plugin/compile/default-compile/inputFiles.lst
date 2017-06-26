@@ -1,13 +1,12 @@
-C:\Java\mail-service\src\main\java\com\mail\JaxbDataFormat.java
 C:\Java\mail-service\src\main\java\com\rest\filter\CollectionFilter.java
 C:\Java\mail-service\src\main\java\com\model\Mail.java
 C:\Java\mail-service\src\main\java\com\model\entity\Identifiable.java
+C:\Java\mail-service\src\generated\com\model\entity\QMailStatus.java
 C:\Java\mail-service\src\main\java\com\dao\MailItemRepository.java
 C:\Java\mail-service\src\main\java\com\mail\SimpleMailSender.java
 C:\Java\mail-service\src\main\java\com\rest\filter\EnumFilter.java
 C:\Java\mail-service\src\main\java\com\model\entity\converters\LocalDateTimeAttributeConverter.java
 C:\Java\mail-service\src\main\java\com\config\ApplicationContextProvider.java
-C:\Java\mail-service\target\generated-sources\mysema\com\model\entity\QMailStatus.java
 C:\Java\mail-service\src\main\java\com\rest\View.java
 C:\Java\mail-service\src\main\java\com\rest\filter\FilterUtil.java
 C:\Java\mail-service\src\main\java\com\rest\MailListColumnFilter.java
@@ -16,11 +15,12 @@ C:\Java\mail-service\src\main\java\com\rest\filter\DateTimeFilter.java
 C:\Java\mail-service\src\main\java\com\config\SpringBootApplicationStarter.java
 C:\Java\mail-service\src\main\java\com\rest\MailListResponse.java
 C:\Java\mail-service\src\main\java\com\model\entity\AbstractEntity.java
-C:\Java\mail-service\src\main\java\com\config\TestBean.java
 C:\Java\mail-service\src\main\java\com\dao\MailStatusRepository.java
 C:\Java\mail-service\src\main\java\com\model\entity\MailItem.java
 C:\Java\mail-service\src\main\java\com\rest\filter\Column.java
 C:\Java\mail-service\src\main\java\com\mail\MailListener.java
+C:\Java\mail-service\src\generated\com\model\entity\QMailItem.java
+C:\Java\mail-service\src\generated\com\model\entity\QAbstractEntity.java
 C:\Java\mail-service\src\main\java\com\config\RouterConfig.java
 C:\Java\mail-service\src\main\java\com\service\MailServiceImpl.java
 C:\Java\mail-service\src\main\java\com\config\CustomTomcatContainerFactory.java
@@ -31,7 +31,5 @@ C:\Java\mail-service\src\main\java\com\mail\MailManager.java
 C:\Java\mail-service\src\main\java\com\config\WebConfig.java
 C:\Java\mail-service\src\main\java\com\model\DBObject.java
 C:\Java\mail-service\src\main\java\com\rest\filter\StringFilter.java
-C:\Java\mail-service\target\generated-sources\mysema\com\model\entity\QAbstractEntity.java
 C:\Java\mail-service\src\main\java\com\rest\filter\FilterObject.java
-C:\Java\mail-service\target\generated-sources\mysema\com\model\entity\QMailItem.java
 C:\Java\mail-service\src\main\java\com\service\MailService.java

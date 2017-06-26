@@ -1,33 +1,31 @@
 package com.mail;
 
-import com.dao.MailItemRepository;
-import com.model.DBObject;
-import com.model.Mail;
-import com.model.entity.MailItem;
-import com.model.entity.MailStatus;
-import org.apache.camel.*;
+import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.Message;
+import org.apache.camel.Processor;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultMessage;
-import org.apache.camel.model.dataformat.JaxbDataFormat;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import com.dao.MailItemRepository;
+import com.model.DBObject;
+import com.model.Mail;
+import com.model.entity.MailItem;
+import com.model.entity.MailStatus;
 
 /**
  * Created by Julia on 08.06.2017.
  */
 @Configuration
-
 public class MailListener {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -47,8 +45,6 @@ public class MailListener {
                         .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        //JAXBContext jaxbContext = JAXBContext.newInstance(Mail.class);
-                        //Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                         Message message = exchange.getIn();
                         Mail mail = (Mail) message.getBody();
                         MailItem item = MailItem.createMailItem(mail);
@@ -79,8 +75,6 @@ public class MailListener {
                       .unmarshal().json(JsonLibrary.Jackson, DBObject.class).process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                       // JAXBContext jaxbContext = JAXBContext.newInstance(Mail.class);
-                     //   Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                         Message message = exchange.getIn();
                         DBObject mail = (DBObject) message.getBody();
                         MailItem byUuid = mailItemRepository.findByUuid(mail.getUuid());

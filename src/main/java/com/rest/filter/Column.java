@@ -1,16 +1,22 @@
 package com.rest.filter;
 
-import com.google.common.collect.Lists;
+import java.lang.reflect.Field;
+import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.springframework.util.StringUtils;
 
-import java.lang.reflect.Field;
-import java.time.temporal.Temporal;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.google.common.collect.Lists;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.EntityPathBase;
 
 /**
  * Created by Julia on 22.06.2017.
@@ -69,7 +75,7 @@ public class Column {
     }
 
 
-    private Object value;
+	private ColumnFilter value;
     private List<Field> path;
     private Field field;
 
@@ -94,11 +100,11 @@ public class Column {
                 if(value != null) {
                     columnFilter.setValue(value, column.getField());
                 } else {
-                    logger.error("Couldn't find field with name value");
+					logger.error("Couldn't find         eld with name value");
                 }
             }
             return column;
-        }).collect(Collectors.toList());
+		}).filter(c -> c != null).collect(Collectors.toList());
 
 
     }
@@ -108,11 +114,11 @@ public class Column {
     }
 
 
-    public Object getValue() {
+	public ColumnFilter getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+	public void setValue(ColumnFilter value) {
         this.value = value;
     }
 
@@ -143,4 +149,8 @@ public class Column {
         }
         return type;
     }
+
+	public BooleanExpression getPredicate(EntityPathBase qEntity) throws Exception {
+		return this.value.createPredicate(this, qEntity);
+	}
 }

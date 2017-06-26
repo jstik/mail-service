@@ -1,7 +1,10 @@
 package com.rest.filter;
+import java.lang.reflect.Field;
+
 import org.codehaus.jackson.JsonNode;
 
-import java.lang.reflect.Field;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.EntityPathBase;
 
 /**
  * Created by Julia on 23.06.2017.
@@ -22,4 +25,9 @@ public class CollectionFilter implements ColumnFilter {
     public boolean isValid() {
         return value.isValid();
     }
+
+	@Override
+	public BooleanExpression createPredicate(Column column, EntityPathBase qEntity) throws Exception {
+		return this.value.createPredicate(column, qEntity);
+	}
 }

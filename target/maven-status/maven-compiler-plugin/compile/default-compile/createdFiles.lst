@@ -4,7 +4,6 @@ com\model\entity\QMailItem.class
 com\model\entity\MailItem.class
 com\config\ApplicationContextProvider.class
 com\dao\MailItemRepository.class
-com\mail\JaxbDataFormat.class
 com\model\entity\MailStatus.class
 com\model\entity\converters\LocalDateTimeAttributeConverter.class
 com\rest\filter\Column$1.class
@@ -19,7 +18,6 @@ com\rest\filter\ColumnFilter.class
 com\model\DBObject.class
 com\mail\MailListener.class
 com\mail\MailListener$1.class
-com\config\TestBean.class
 com\mail\MailListener$1$1.class
 com\rest\filter\Column$Type.class
 com\config\RouterConfig.class
