@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://com.bssys/simplews/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="simplews"
+                  targetNamespace="http://com.bssys/simplews/">
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://com.bssys/simplews/">
+            <xsd:element name="UserOperation" type="tns:RequestBO" />
+            <xsd:element name="UserOperationResponse" type="tns:ResponseBO" />
+            <xsd:complexType name="RequestBO">
+                <xsd:sequence>
+                    <xsd:element name="user" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ResponseBO">
+                <xsd:sequence>
+                    <xsd:element name="account" type="xsd:string"
+                                 minOccurs="1" maxOccurs="unbounded" />
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="UserOperationRequest">
+        <wsdl:part element="tns:UserOperation" name="parameters" />
+    </wsdl:message>
+    <wsdl:message name="UserOperationResponse">
+        <wsdl:part element="tns:UserOperationResponse" name="parameters" />
+    </wsdl:message>
+    <wsdl:portType name="simplews">
+        <wsdl:operation name="UserOperation">
+            <wsdl:input message="tns:UserOperationRequest" />
+            <wsdl:output message="tns:UserOperationResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="simplewsSOAP" type="tns:simplews">
+        <soap:binding style="document"
+                      transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="UserOperation">
+            <soap:operation soapAction="http://com.bssys/simplews/UserOperation" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="mailsender">
+        <wsdl:port binding="tns:mailsenderSOAP" name="mailsenderSOAP">
+            <soap:address location="http://www.example.org/" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

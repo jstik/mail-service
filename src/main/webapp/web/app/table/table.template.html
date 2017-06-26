@@ -1,0 +1,22 @@
+<div >
+<table ng-cloak class="table fixedHead" >
+    <thead >
+    <tr>
+        <th ng-repeat="cell in tableController.table.head" head-cell-directive="cell" filter-dropdown="cell"
+            cell-name="{{cell.name}}"></th>
+    </tr>
+    </thead>
+    <tbody custom-infinite-scroll="tableController.table" >
+
+    <tr  ng-repeat="row in tableController.table.body" ng-show="tableController.table.loaded" data-id={{row.id}}>
+        <td ng-repeat="cell in row.cells" row-cell-directive="cell" cell-name="{{cell.name}}"> fdsdfs</td>
+    </tr>
+
+    </tbody>
+
+</table>
+</div>
+
+<div style="width: 100%;" ng-show="!tableController.table.loaded">
+    <div style="margin: 0 auto;" class="loader"></div>
+</div>

@@ -1,0 +1,35 @@
+.statusSent{
+    color: #5cb85c;
+}
+.statusError{
+    color: red;
+}
+.statusQueued{
+    color: #428bca;
+}
+.mailListContainer{
+    display: table; width: 98%; align-self: center; margin:10px; padding: 5px; border: solid 1px gainsboro;
+}
+.tableContainer{
+    border: solid 1px gainsboro;
+
+}
+/*min-height:100vh;*/
+/*overflow-y: scroll; position: absolute;*/
+[cell-name="checkAll"],  [cell-name="checkbox"]{
+     width: 20px;
+}
+[cell-name="to"],[cell-name="status"],
+[cell-name="created"],[cell-name="updated"],[cell-name="type"]{
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%;
+}
+[cell-name="from"] {
+    width: 30%;
+    min-width: 30%;
+    max-width: 40%;
+}
+[cell-name="action"] {
+    width: 100px;
+}

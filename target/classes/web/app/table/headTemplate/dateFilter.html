@@ -1,0 +1,23 @@
+<div class="input-group" style="margin: 5px; display: table">
+    <div style="display: table-row;">
+
+            <input type="text" readonly="readonly" filter-date-time="item" class="form-control"
+                   ng-model="item.columnFilter.from" placeholder="From" aria-describedby="sizing-addon4">
+
+            <span class="input-group-addon textFilterClear" ng-click="item.columnFilter.clear()">
+                <span class="glyphicon glyphicon-remove"></span>
+            </span>
+    </div >
+
+    <div style="display: table-row"  class="dateInputTo">
+        <input type="text" filter-date-time="item" dateTo="dateTo" readonly="readonly" class="form-control dateInputTo"
+               ng-model="item.columnFilter.to" placeholder="To" aria-describedby="sizing-addon4">
+
+        <span class="input-group-addon textFilterClear" ng-click="item.columnFilter.clear()">
+                <span class="glyphicon glyphicon-remove"></span>
+        </span>
+    </div>
+
+
+
+</div>
