@@ -73,7 +73,10 @@ function Table(options) {
         var filter = JSON.stringify(self.getColumnFilter());
         return self.options.$http.get(self.options.dataUrl,
             {
-                params: {filter: filter},
+                params: {
+                	filter: filter,
+                	page : this.currentPage
+                },
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8;'
                 }

@@ -1,11 +1,13 @@
 package com.model;
 
+import java.io.Serializable;
+
 import com.model.entity.Identifiable;
 
 /**
  * Created by Julia on 09.06.2017.
  */
-public class DBObject implements Identifiable {
+public class DBObject implements Identifiable, Serializable {
     private Long id;
     private String uuid;
     private Class klass;
@@ -20,7 +22,8 @@ public class DBObject implements Identifiable {
     }
 
 
-    public Long getId() {
+    @Override
+	public Long getId() {
         return id;
     }
 
@@ -28,7 +31,8 @@ public class DBObject implements Identifiable {
         this.id = id;
     }
 
-    public String getUuid() {
+    @Override
+	public String getUuid() {
         return uuid;
     }
 

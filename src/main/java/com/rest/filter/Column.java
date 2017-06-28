@@ -2,19 +2,13 @@ package com.rest.filter;
 
 import java.lang.reflect.Field;
 import java.time.temporal.Temporal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ArrayNode;
-import org.springframework.util.StringUtils;
 
-import com.google.common.collect.Lists;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EntityPathBase;
 
@@ -24,7 +18,7 @@ import com.querydsl.core.types.dsl.EntityPathBase;
 public class Column {
     private static Log logger = LogFactory.getLog(Column.class);
 
-    enum Type {
+	public enum Type {
         STRING {
             @Override
             public ColumnFilter getColumnFilter(Field field) {
@@ -37,6 +31,14 @@ public class Column {
                 return new DateTimeFilter();
             }
         },
+		BOOLEAN {
+
+			@Override
+			public ColumnFilter getColumnFilter(Field field) {
+				return new BooleanFilter();
+			}
+
+		},
         COLLECTION {
             @Override
             public ColumnFilter getColumnFilter(Field field) {
@@ -55,6 +57,15 @@ public class Column {
             public ColumnFilter getColumnFilter(Field field) {
                 return new EnumFilter();
             }
+		},
+		OBJECT {
+
+			@Override
+			public ColumnFilter getColumnFilter(Field field) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
         };
 
         public  abstract ColumnFilter getColumnFilter(Field field);
@@ -67,9 +78,10 @@ public class Column {
                 return NUMBER;
             } else if(Collection.class.isAssignableFrom(klass)){
                return COLLECTION;
-            } else {
+			} else if (klass.isEnum()) {
                 return ENUM;
             }
+			return OBJECT;
         }
 
     }
@@ -83,31 +95,7 @@ public class Column {
     }
 
 
-    public static List<Column> getColumns(ArrayNode arrayNode, Class klass){
-        ArrayList<JsonNode> nodes = Lists.newArrayList(arrayNode.getElements());
-        return nodes.stream().map(n -> {
-            JsonNode columnName = n.findValue("name");
-            if(StringUtils.isEmpty(columnName)){
-               logger.warn( " Could find value of 'name' field in incomming json ");
-               return null;
-            }
-            Column column = FilterUtil.createColumn(columnName, klass);
-            if(column != null){
-                Type type = Type.getType(column.getField().getType());
-                ColumnFilter columnFilter = type.getColumnFilter(column.getField());
-                column.setValue(columnFilter);
-                JsonNode value = n.findValue("value");
-                if(value != null) {
-                    columnFilter.setValue(value, column.getField());
-                } else {
-					logger.error("Couldn't find         eld with name value");
-                }
-            }
-            return column;
-		}).filter(c -> c != null).collect(Collectors.toList());
 
-
-    }
 
     public String getName() {
         return field.getName();

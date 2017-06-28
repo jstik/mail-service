@@ -1,15 +1,22 @@
 package com.rest.filter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.JsonNode;
-import org.springframework.util.ReflectionUtils;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ArrayNode;
+import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
+
+import com.google.common.collect.Lists;
+import com.rest.filter.Column.Type;
 
 /**
  * Created by Julia on 23.06.2017.
@@ -67,5 +74,30 @@ public class FilterUtil {
             column.setField(field);
         }
     }
+
+	public static List<Column> getColumns(ArrayNode arrayNode, Class klass) {
+		ArrayList<JsonNode> nodes = Lists.newArrayList(arrayNode.getElements());
+		return nodes.stream().map(n -> {
+			JsonNode columnName = n.findValue("name");
+			if (StringUtils.isEmpty(columnName)) {
+				logger.warn(" Could find value of 'name' field in incomming json ");
+				return null;
+			}
+			Column column = FilterUtil.createColumn(columnName, klass);
+			if (column != null) {
+				Type type = Type.getType(column.getField().getType());
+				ColumnFilter columnFilter = type.getColumnFilter(column.getField());
+				column.setValue(columnFilter);
+				JsonNode value = n.findValue("value");
+				if (value != null) {
+					columnFilter.setValue(value, column.getField());
+				} else {
+					logger.error("Couldn't find field with name value");
+				}
+			}
+			return column;
+		}).filter(c -> c != null).collect(Collectors.toList());
+
+	}
 
 }

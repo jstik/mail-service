@@ -1,5 +1,18 @@
 package com.model.entity;
 
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -7,21 +20,20 @@ import com.model.Mail;
 import com.rest.View;
 import com.rest.filter.FilterObject;
 
-import javax.persistence.*;
-
 /**
  * Created by Julia on 07.06.2017.
  */
 @Entity
 @Table(name = "mail_item")
-public class MailItem  extends AbstractEntity implements Identifiable{
+public class MailItem extends AbstractEntity implements Identifiable, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+	@Column(name = "id")
     private Long id;
 
     @Column(name = "m_from")
+	@NotNull
     private String from;
 
     @Column(name = "m_to")
@@ -62,7 +74,8 @@ public class MailItem  extends AbstractEntity implements Identifiable{
         return item;
     }
 
-    public Long getId() {
+    @Override
+	public Long getId() {
         return id;
     }
 
@@ -134,7 +147,8 @@ public class MailItem  extends AbstractEntity implements Identifiable{
         this.mailStatus = mailStatus;
     }
 
-    public String getUuid() {
+    @Override
+	public String getUuid() {
         return uuid;
     }
 

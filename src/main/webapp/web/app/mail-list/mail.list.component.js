@@ -81,7 +81,7 @@ function createTable(data, params) {
             id: mail.id,
             name: 'from',
             data: mail.from,
-            template: '/table/cellTemplate/inputCell.html'
+            template: '/table/cellTemplate/defaultCell.html'
         }));
         row.pushCell(new RowCell({
             id: mail.id,

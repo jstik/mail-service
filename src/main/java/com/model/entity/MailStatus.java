@@ -1,18 +1,29 @@
 package com.model.entity;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonValue;
-
-import javax.persistence.*;
-
 import static com.model.entity.MailStatus.Status.QUEUED;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * Created by Julia on 07.06.2017.
  */
 @Entity
 @Table(name = "mail_status")
-public class MailStatus extends AbstractEntity implements Identifiable{
+public class MailStatus extends AbstractEntity implements Identifiable, Serializable {
     public enum Status{
         QUEUED, SENT, ERROR;
     }
@@ -34,7 +45,8 @@ public class MailStatus extends AbstractEntity implements Identifiable{
     @JsonIgnore
     private MailItem mailItem;
 
-    public Long getId() {
+    @Override
+	public Long getId() {
         return id;
     }
 
