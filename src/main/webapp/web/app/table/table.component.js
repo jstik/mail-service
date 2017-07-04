@@ -1,5 +1,5 @@
 /*let simpleTable = require('./table.module');*/
-let module = angular.module('simpleTable');
+var module = angular.module('simpleTable');
 function HeadCell(parameters) {
     this.label = parameters.label;
     this.template = parameters.template;
@@ -192,7 +192,7 @@ function Row(id) {
 }
 
 function Table(options) {
-    let self = this;
+    var self = this;
     this.head = []; //HeadCell
     this.body = []; //Rows
     this.currentPage = 0;
@@ -291,6 +291,10 @@ function Table(options) {
         return column;
     };
 
+    this.getColumnCount = function () {
+        return self.body.length;
+    }
+
 }
 
 function formatDate(date) {
@@ -302,7 +306,7 @@ function formatDate(date) {
     let minutes = date.getMinutes();
     let hourStr = hours >= 10 ? hours : '0'+ hours;
     let minutesStr = minutes >= 10 ? minutes : '0'+ minutes;
-    return day + ' ' + monthNames[monthIndex] + ' ' + year + ' ' + hourStr + ':' + minutesStr;
+    return day + ' ' + monthNames[monthIndex] + ' ' + year + ' ' + hourStr + ':' +  minutesStr;
 }
 
 
@@ -310,7 +314,7 @@ module.component('simpleTable', {
     css: 'table/css/table.css',
     templateUrl: 'table/table.template.html',
     controller: ['$scope', '$timeout', '$http', '$q', function simpleTableController($scope, $timeout, $http, $q) {
-        let self = this;
+        var self = this;
         this.table = $scope.$parent.table;
         $http.get(this.table.options.schemaUrl).then(function (response) {
             self.table.loadSettings(response.data.properties);
