@@ -1,5 +1,7 @@
 package com.rest.filter;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.codehaus.jackson.JsonNode;
 import org.springframework.util.ReflectionUtils;
@@ -13,21 +15,24 @@ import com.querydsl.core.types.dsl.EnumPath;
  * Created by Julia on 23.06.2017.
  */
 public class EnumFilter implements ColumnFilter{
-    private Object value;
+    private List<Object> value = new ArrayList<>();
 
     @Override
     public void setValue(JsonNode node, Field field) {
-        JsonNode filterValue = node.findValue("filterValue");
-        if(!StringUtils.isEmpty(filterValue)){
-            return;
+        Enum[] enums = ((Class<Enum>) field.getType()).getEnumConstants();
+        for (Enum anEnum : enums) {
+            JsonNode value = node.findValue(anEnum.name());
+            if(value == null)
+                continue;
+            if(value.isBoolean() && !value.getBooleanValue())
+                continue;
+            this.value.add(anEnum);
         }
-        Class<Enum> type = (Class<Enum>) field.getType();
-        value = Enum.valueOf(type, filterValue.asText());
     }
 
     @Override
     public boolean isValid() {
-        return value != null;
+        return !value.isEmpty();
     }
 
 	@Override
@@ -40,6 +45,6 @@ public class EnumFilter implements ColumnFilter{
 		Field qField = ReflectionUtils.findField(baseEntity.getClass(), name);
 
 		EnumPath path = (EnumPath) qField.get(baseEntity);
-		return path.eq(value);
+		return path.in(value);
 	}
 }

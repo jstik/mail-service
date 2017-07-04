@@ -1,4 +1,4 @@
-/*simpleTable = require('./table.module');*/
+ /*simpleTable = require('./table.module');*/
 var module = angular.module('simpleTable');
 module.directive('rowCellDirective', function () {
     return {

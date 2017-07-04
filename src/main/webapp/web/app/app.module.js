@@ -2,11 +2,13 @@
 
 var angular = require('./bower_components/angular');
 var mailList = require('./mail-list/mail.list.module');
+import './bower_components/bootstrap/dist/css/bootstrap.css';
 
-/*import './bower_components/smalot-bootstrap-datetimepicker/js/bootstrap-datetimepicker';*/
+
+	/*import './bower_components/smalot-bootstrap-datetimepicker/js/bootstrap-datetimepicker';*/
 
 
-/*export default*/ angular.module('mailApp', ['mailList']).config(function ($compileProvider) {
-    var debugEnabled = $compileProvider.debugInfoEnabled();
-    console.log("debugInfoEnabled=", debugEnabled);
+	/*export default*/ angular.module('mailApp', [ 'mailList' ]).config(function($compileProvider) {
+	var debugEnabled = $compileProvider.debugInfoEnabled();
+	console.log("debugInfoEnabled=", debugEnabled);
 });

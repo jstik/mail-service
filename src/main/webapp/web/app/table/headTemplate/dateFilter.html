@@ -1,23 +1,28 @@
-<div class="input-group" style="margin: 5px; display: table">
-    <div style="display: table-row;">
+<div class="input-group filterContainer">
+    <div class="filterRow" >
+        <div class="innerFilterRow">
+            <input type="text" readonly="readonly" filter-value="from" filter-date-time="item" class="form-control "
+                   ng-model="item.columnFilter.view.from" placeholder="From" aria-describedby="sizing-addon4">
 
-            <input type="text" readonly="readonly" filter-date-time="item" class="form-control"
-                   ng-model="item.columnFilter.from" placeholder="From" aria-describedby="sizing-addon4">
-
-            <span class="input-group-addon textFilterClear" ng-click="item.columnFilter.clear()">
+            <span class="input-group-addon textFilterClear dateClear" ng-click="clearFilter('from');">
                 <span class="glyphicon glyphicon-remove"></span>
             </span>
+        </div>
     </div >
 
-    <div style="display: table-row"  class="dateInputTo">
-        <input type="text" filter-date-time="item" dateTo="dateTo" readonly="readonly" class="form-control dateInputTo"
-               ng-model="item.columnFilter.to" placeholder="To" aria-describedby="sizing-addon4">
+    <div class="filterRow">
+        <div class="innerFilterRow">
+        <input type="text" filter-date-time="item" date-start-from="from" filter-value="to"  readonly="readonly" class="form-control "
+               ng-model="item.columnFilter.view.to" placeholder="To" aria-describedby="sizing-addon4">
 
-        <span class="input-group-addon textFilterClear" ng-click="item.columnFilter.clear()">
+        <span class="input-group-addon textFilterClear  dateClear" ng-click="clearFilter('to');">
                 <span class="glyphicon glyphicon-remove"></span>
         </span>
+        </div>
     </div>
 
-
+    <div class="filterRow" >
+        <button class="btn btn-info btn-sm" ng-click="applyFilter()"> Filter</button>
+    </div>
 
 </div>

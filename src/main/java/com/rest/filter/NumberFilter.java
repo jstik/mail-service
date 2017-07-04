@@ -20,7 +20,7 @@ public class NumberFilter implements ColumnFilter {
 
     @Override
     public void setValue(JsonNode node, Field field) {
-        JsonNode filterValue = node.findValue("filterValue");
+        JsonNode filterValue = node.findValue("value");
         if(filterValue == null){
             return;
         }

@@ -71,8 +71,8 @@ public class MailListener {
             @Override
             public void configure() throws Exception {
                 onException(Exception.class).handled(true).marshal().json(JsonLibrary.Jackson) .to("activemq:queue:failedMails");
-                from("activemq:queue:mailToSend")
-                      .unmarshal().json(JsonLibrary.Jackson, DBObject.class).process(new Processor() {
+				from("activemq:queue:mailToSend")
+						.unmarshal().json(JsonLibrary.Jackson, DBObject.class).threads(10).process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
                         Message message = exchange.getIn();

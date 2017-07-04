@@ -2,6 +2,7 @@ package com.rest.filter;
 
 import java.lang.reflect.Field;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -88,7 +89,7 @@ public class Column {
 
 
 	private ColumnFilter value;
-    private List<Field> path;
+    private List<Field> path = new ArrayList<>();
     private Field field;
 
     public Column(){

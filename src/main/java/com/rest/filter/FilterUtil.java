@@ -2,10 +2,7 @@ package com.rest.filter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
@@ -39,7 +36,7 @@ public class FilterUtil {
 
         Field field = ReflectionUtils.findField(klass,columnName);
         if(field == null) {
-            List<Field> fields = Arrays.asList(klass.getFields());
+            List<Field> fields = Arrays.asList(klass.getDeclaredFields());
             for (Field f : fields) {
                 if (!f.isAnnotationPresent(FilterObject.class))
                     continue;
@@ -71,7 +68,7 @@ public class FilterUtil {
         if(childField.isAnnotationPresent(FilterObject.class)){
             processField(column, childField, main);
         } else {
-            column.setField(field);
+            column.setField(childField);
         }
     }
 
@@ -96,7 +93,8 @@ public class FilterUtil {
 				}
 			}
 			return column;
-		}).filter(c -> c != null).collect(Collectors.toList());
+		}).filter(Objects::nonNull).filter(c-> c.getValue().isValid())
+                .collect(Collectors.toList());
 
 	}
 

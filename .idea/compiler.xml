@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mail-service" />
+        <module name="camel" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="mail-service" target="1.8" />
+      <module name="camel" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

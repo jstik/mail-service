@@ -24,18 +24,19 @@ module.directive('filterDropdownDirective', function () {
         },
         link: function(scope, element, attrs) {
             scope.getContentUrl = function () {
-                switch (scope.item.dataType) {
-                    case DataType.STRING:
-                        return '/table/headTemplate/textFilter.html';
-                        break;
-                    case DataType.ENUM:
-                        return '/table/headTemplate/enumFilter.html';
-                        break;
-                    case DataType.DATE:
-                        return '/table/headTemplate/dateFilter.html';
-                        break;
-                }
+                 return scope.item.columnFilter.template;
+            };
+            scope.applyFilter = function () {
+                scope.item.columnFilter.apply();
+                scope.$emit('applyFilter', scope.item);
+                console.debug("applyFilter event is emit");
+            };
+            scope.clearFilter = function (name) {
+                scope.item.columnFilter.remove(name);
+                scope.$emit('applyFilter', scope.item);
+                console.debug("applyFilter event is emit");
             }
+
         },
         template:  '<div ng-include="getContentUrl()"> </div>'
     }
@@ -54,17 +55,14 @@ module.directive('filterDateTime', function () {
                 language: 'ru',
                 weekStart: 1
             });
-
-            $(element).datetimepicker().on('changeDate', function (){
-                if(attrs.dateto){
-                    scope.item.columnFilter._to = element.data("datetimepicker").getDate();
-                } else {
-                    scope.item.columnFilter._from = element.data("datetimepicker").getDate();
-                }
-                scope.$emit('dateFilterChanged', scope.item);
-                scope.item.columnFilter.applyFilter();
+            $('.dateClear').click(function(e) {
+                e.stopPropagation();
             });
-            if(attrs.dateto){
+            $(element).datetimepicker().on('changeDate', function (){
+                var filterValue = attrs.filterValue;
+                scope.item.columnFilter.toggleValue(filterValue, element.data("datetimepicker").getDate());
+            });
+            if(attrs.dateStartFrom){
                 $(element).datetimepicker().on('show', function () {
                     $(element).datetimepicker('setStartDate', scope.item.columnFilter.from);
                 })

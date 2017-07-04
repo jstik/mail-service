@@ -8,7 +8,9 @@
     color: #428bca;
 }
 .mailListContainer{
-    display: table; width: 98%; align-self: center; margin:10px; padding: 5px; border: solid 1px gainsboro;
+    display: table; width: 98%; align-self: center; margin:10px; padding: 5px;
+    border: solid 1px gainsboro;
+    height : calc(82vh);
 }
 .tableContainer{
     border: solid 1px gainsboro;
@@ -19,16 +21,11 @@
 [cell-name="checkAll"],  [cell-name="checkbox"]{
      width: 20px;
 }
-[cell-name="to"],[cell-name="status"],
+[cell-name="from"],[cell-name="to"],[cell-name="status"],
 [cell-name="created"],[cell-name="updated"],[cell-name="type"]{
     width: 15%;
     min-width: 15%;
     max-width: 15%;
-}
-[cell-name="from"] {
-    width: 30%;
-    min-width: 30%;
-    max-width: 40%;
 }
 [cell-name="action"] {
     width: 100px;

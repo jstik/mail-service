@@ -2,15 +2,7 @@ package com.model.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -49,6 +41,7 @@ public class MailItem extends AbstractEntity implements Identifiable, Serializab
     private String type;
 
     @Column(name = "uuid")
+    @JsonIgnore
     private String uuid;
 
     @Column(name = "tenant_id")
@@ -59,6 +52,9 @@ public class MailItem extends AbstractEntity implements Identifiable, Serializab
     @JsonIgnore
     @FilterObject(name = "status", targetFieldName = "status")
     private MailStatus mailStatus;
+
+    @Transient
+    private boolean test;
 
     public static MailItem createMailItem(Mail mail) {
         MailItem item = new MailItem();

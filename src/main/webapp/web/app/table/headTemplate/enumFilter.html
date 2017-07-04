@@ -1,3 +1,17 @@
-<a class="dropdown-item" href="#">Action</a>
-<a class="dropdown-item" href="#">Another action</a>
-<a class="dropdown-item" href="#">Something else here</a>
+<div class="input-group filterContainer">
+    <div class="filterRow" ng-repeat="option in item.columnFilter.values">
+        <div class="innerFilterRow">
+            <div style="display: inline; color: gray">
+                 <input ng-model="item.columnFilter.view[option]" type="checkbox"
+                        ng-false-value ="false"
+                        ng-true-value ="true"
+                        ng-change ="item.columnFilter.toggleValue(option,item.columnFilter.view[option] )">
+                {{option}}
+            </div>
+        </div>
+    </div>
+
+    <div class="filterRow"  style="display: inline;" >
+        <button class="btn btn-info btn-sm" ng-click="applyFilter()"> Filter</button>
+    </div>
+</div>

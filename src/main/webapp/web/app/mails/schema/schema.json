@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "id": "urn:jsonschema:com:model:entity:MailItem",
+  "properties":{
+    "created":{
+      "type": "string",
+      "format": "date-time",
+      "pattern": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    },
+    "updated":{
+      "type": "string",
+      "format": "date-time",
+      "pattern": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    },
+    "id":{
+      "type": "integer"
+    },
+    "from":{
+      "type": "string",
+      "required": true
+    },
+    "to":{
+      "type": "string"
+    },
+    "subject":{
+      "type": "string"
+    },
+    "body":{
+      "type": "string"
+    },
+    "cc":{
+      "type": "string"
+    },
+    "type":{
+      "type": "string"
+    },
+    "status":{
+      "type": "string",
+      "enum":[
+        "QUEUED",
+        "SENT",
+        "ERROR"
+      ]
+    }
+  }
+}

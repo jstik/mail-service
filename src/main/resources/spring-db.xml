@@ -14,7 +14,15 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-3.1.xsd">
     <beans profile="!test">
+       <!-- <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+            <property name="location" value="project.properties"/>
+        </bean>-->
+
         <bean lazy-init="false" class="com.config.CustomTomcatContainerFactory">
+            <property name="jdbcUrl" value="${jdbc.url}"/>
+            <property name="jdbcDriver" value="${jdbc.driver}"/>
+            <property name="user" value="${jdbc.user}"/>
+            <property name="password" value="${jdbc.password}"/>
         </bean>
         <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/mainDB" lookup-on-startup="false"
                          expected-type="javax.sql.DataSource" />

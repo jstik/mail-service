@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.rest.View;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonGenerationException;
@@ -51,14 +53,15 @@ public class MailListController {
 		return "/index.html";
 	}
 
-	@RequestMapping(value = "/mails/schema")
+	@RequestMapping(value = "/mails/schema/schema.json")
 	public @ResponseBody Object generateMailSchema() throws JsonMappingException {
 		return jsonManager.generateSchema(MailItem.class);
 	}
 
+
 	@RequestMapping(value = "/mails/mails.json")
 	public @ResponseBody Object getMails(@RequestParam(name = "filter") String filter,
-			@RequestParam(name = "page") int page) throws IOException {
+								  @RequestParam(name = "page") int page) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		ArrayNode arrayNode = objectMapper.readValue(filter, ArrayNode.class);
 		List<Column> columns = FilterUtil.getColumns(arrayNode, MailItem.class);

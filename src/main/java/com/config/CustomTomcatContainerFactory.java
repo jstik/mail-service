@@ -10,12 +10,18 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 
 import javax.activation.DataSource;
+import javax.jdo.annotations.Value;
 import java.io.File;
 
 /**
  * Created by Julia on 07.06.2017.
  */
 public class CustomTomcatContainerFactory extends TomcatEmbeddedServletContainerFactory {
+    private String jdbcUrl;
+    private String jdbcDriver;
+    private String user;
+    private String password;
+
     @Override
     protected TomcatEmbeddedServletContainer getTomcatEmbeddedServletContainer(
             Tomcat tomcat) {
@@ -37,11 +43,27 @@ public class CustomTomcatContainerFactory extends TomcatEmbeddedServletContainer
         ContextResource resource = new ContextResource();
         resource.setName("jdbc/mainDB");
         resource.setType(com.zaxxer.hikari.HikariDataSource.class.getName());
-        resource.setProperty("driverClassName", "oracle.jdbc.driver.OracleDriver");
-        resource.setProperty("jdbcUrl", "jdbc:oracle:thin:@localhost:1521/pdborcl");
-        resource.setProperty("username", "sa");
-        resource.setProperty("password", "sa");
+        resource.setProperty("driverClassName", jdbcDriver);
+        resource.setProperty("jdbcUrl", jdbcUrl);
+        resource.setProperty("username", user);
+        resource.setProperty("password", password);
         resource.setProperty("factory", "org.apache.naming.factory.BeanFactory");
         context.getNamingResources().addResource(resource);
+    }
+
+    public void setJdbcUrl(String jdbcUrl) {
+        this.jdbcUrl = jdbcUrl;
+    }
+
+    public void setJdbcDriver(String jdbcDriver) {
+        this.jdbcDriver = jdbcDriver;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

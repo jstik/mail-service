@@ -2,9 +2,10 @@
 
     {{item.label | uppercase}}
 
-    <div class="dropdown" ng-if="item.filter" >
+    <div class="dropdown" ng-if="item.columnFilter" >
         <button ng-class="{
-        'btn-table-filter-applied': item.columnFilter.applied > 0}"
+        'btn-table-filter-applied': item.columnFilter.hasValue()
+        }"
                 class="btn btn-default btn-sm btn-table-filter " aria-label="Center Align"
                  data-toggle="dropdown">
             <span style="font-size: 10px" class="glyphicon glyphicon-filter" aria-hidden="true"></span>

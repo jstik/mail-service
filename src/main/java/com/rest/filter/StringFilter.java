@@ -7,6 +7,7 @@ import org.springframework.util.ReflectionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.core.types.dsl.StringPath;
+import org.springframework.util.StringUtils;
 
 /**
  * Created by Julia on 22.06.2017.
@@ -16,7 +17,7 @@ public class StringFilter implements ColumnFilter {
 
     @Override
     public void setValue(JsonNode node, Field field) {
-        JsonNode filterValue = node.findValue("filterValue");
+        JsonNode filterValue = node.findValue("text");
         if(filterValue == null){
             return;
         }
@@ -25,7 +26,7 @@ public class StringFilter implements ColumnFilter {
 
     @Override
     public boolean isValid() {
-        return value != null;
+        return !StringUtils.isEmpty(value);
     }
 
 	@Override

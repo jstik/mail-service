@@ -1,16 +1,21 @@
 package com.config;
 
+import javax.annotation.Resource;
 import javax.xml.ws.Endpoint;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.broker.BrokerPlugin;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.apache.activemq.jms.pool.PooledConnectionFactory;
+import org.apache.activemq.security.AuthenticationUser;
+import org.apache.activemq.security.SimpleAuthenticationPlugin;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.util.jndi.JndiContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -18,40 +23,56 @@ import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFac
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.connection.JmsTransactionManager;
 
 import com.service.MailServiceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Julia on 03.06.2017.
  */
 @SpringBootApplication
-/*@ImportResource("applicationContext.xml")*/
-/*@EnableJms*/
 @ImportResource({"spring-email.xml","spring-db.xml"})
 @ComponentScan(basePackages = "com.*")
 @EnableJpaRepositories(value = "com.dao.*")
 @EntityScan(value = "com.model.entity.*")
+@PropertySource(value = {"classpath:project.properties"})
 public class SpringBootApplicationStarter {
     @Autowired
     @Qualifier("pooledConnectionFactory")
     PooledConnectionFactory  pooledConnectionFactory;
+    @Resource
+    public Environment env;
 
     public static void main(String[] args) {
         Endpoint.publish("http://localhost:9999/ws/mailSender", new MailServiceImpl());
         SpringApplication.run(SpringBootApplicationStarter.class, args);
     }
 
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer
+    propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
    @Bean(initMethod = "start", destroyMethod = "stop", name = "broker")
     public BrokerService broker() throws Exception {
+        SimpleAuthenticationPlugin authentication = new SimpleAuthenticationPlugin();
+       List<AuthenticationUser> users = new ArrayList<AuthenticationUser>();
+       users.add(new AuthenticationUser("admin", "admin", "admins,publishers,consumers"));
+       authentication.setUsers(users);
         BrokerService broker = new BrokerService();
-// configure the broker
-        //broker.setUseShutdownHook(false);
         broker.setPersistent(false);
-        broker.setBrokerName("fred");
-        broker.addConnector("tcp://localhost:61617");
+        broker.setBrokerName(env.getProperty("broker.name"));
+        broker.addConnector(env.getProperty("broker.url"));
+       // broker.setPlugins(new BrokerPlugin[]{authentication});
         return broker;
     }
 
@@ -83,8 +104,7 @@ public class SpringBootApplicationStarter {
         JndiContext jndiContext = new JndiContext();
 		CamelContext camelContext = new DefaultCamelContext(jndiContext);
 		ActiveMQComponent component = ActiveMQComponent.activeMQComponent("vm://fred?broker.persistent=false");
-        camelContext.addComponent("activeMq",
-                component);
+        camelContext.addComponent("activemq",component);
         return camelContext;
     }
 
