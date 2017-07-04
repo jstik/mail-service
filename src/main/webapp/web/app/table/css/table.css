@@ -35,6 +35,9 @@
 .innerFilterRow{
     display: inline-table;
 }
+.inlineCell{
+    display: inline
+}
 
 .loader {
     border: 10px solid #f3f3f3;

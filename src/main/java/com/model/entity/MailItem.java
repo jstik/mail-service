@@ -156,4 +156,12 @@ public class MailItem extends AbstractEntity implements Identifiable, Serializab
     public MailStatus.Status getStatus(){
         return this.mailStatus.getStatus();
     }
+
+    public boolean isTest() {
+        return test;
+    }
+
+    public void setTest(boolean test) {
+        this.test = test;
+    }
 }

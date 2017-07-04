@@ -1,5 +1,5 @@
 /*let simpleTable = require('./table.module');*/
-var module = angular.module('simpleTable');
+let module = angular.module('simpleTable');
 function HeadCell(parameters) {
     this.label = parameters.label;
     this.template = parameters.template;
@@ -46,37 +46,56 @@ const DataType = {
         id: 0,
         filterTemplate: '/table/headTemplate/textFilter.html',
         headTemplate: '/table/headTemplate/simpleCellTemplate.html',
-        dataCellTemplate: '/table/cellTemplate/defaultCell.html'
+        dataCellTemplate: '/table/cellTemplate/defaultCell.html',
+        formatData : function (data) {
+            return data;
+        }
     },
     DATE: {
         id: 1,
         filterTemplate: '/table/headTemplate/dateFilter.html',
         headTemplate: '/table/headTemplate/simpleCellTemplate.html',
-        dataCellTemplate: '/table/cellTemplate/defaultCell.html'
+        dataCellTemplate: '/table/cellTemplate/defaultCell.html',
+        formatData : function (data) {
+            let date = new Date( Date.parse(data));
+            return formatDate(date);
+        }
     },
     ENUM: {
         id: 2,
         filterTemplate: '/table/headTemplate/enumFilter.html',
         headTemplate: '/table/headTemplate/simpleCellTemplate.html',
-        dataCellTemplate: '/table/cellTemplate/defaultCell.html'
+        dataCellTemplate: '/table/cellTemplate/defaultCell.html',
+        formatData : function (data) {
+            return data;
+        }
     },
     BOOLEAN: {
         id: 3,
         filterTemplate: '/table/headTemplate/booleanFilter.html',
         headTemplate: '/table/headTemplate/simpleCellTemplate.html',
-        dataCellTemplate: '/table/cellTemplate/defaultCell.html'
+        dataCellTemplate: '/table/cellTemplate/defaultCell.html',
+        formatData : function (data) {
+            return data;
+        }
     },
     CUSTOM: {
         id: 4,
         filterTemplate: '',
         headTemplate: '/table/headTemplate/simpleCellTemplate.html',
-        dataCellTemplate: ''
+        dataCellTemplate: '',
+        formatData : function (data) {
+            return data;
+        }
     },
     NUMBER: {
         id: 5,
         filterTemplate: '/table/headTemplate/textFilter.html',
         headTemplate: '/table/headTemplate/simpleCellTemplate.html',
-        dataCellTemplate: '/table/cellTemplate/defaultCell.html'
+        dataCellTemplate: '/table/cellTemplate/defaultCell.html',
+        formatData : function (data) {
+           return data;
+        }
     }
 };
 
@@ -173,7 +192,7 @@ function Row(id) {
 }
 
 function Table(options) {
-    var self = this;
+    let self = this;
     this.head = []; //HeadCell
     this.body = []; //Rows
     this.currentPage = 0;
@@ -219,20 +238,21 @@ function Table(options) {
                 let rowData = response.data.data[i];
                 let row = new Row(rowData.id);
                 for (let j = 0; j < self.settings.length; j++) {
-                    let cellData = rowData[self.settings[j].propertyName];
+                    let setting = self.settings[j];
+                    let cellData = rowData[setting.propertyName];
                     let cell = new RowCell({
                         id: rowData.id,
-                        data: cellData || self.settings[j].dataCell.label,
-                        template: self.settings[j].dataTemplate(),
-                        name: self.settings[j].name,
-                        func: self.settings[j].dataCell.func,
-                        confirmTitle: self.settings[j].dataCell.confirmTitle
+                        data: setting.dataType.formatData(cellData) || setting.dataCell.label,
+                        template: setting.dataTemplate(),
+                        name: setting.name,
+                        func: setting.dataCell.func,
+                        confirmTitle: setting.dataCell.confirmTitle
                     });
-                    if (self.settings[j].dataCell.onInit) {
-                        self.settings[j].dataCell.onInit(cell);
+                    if (setting.dataCell.onInit) {
+                        setting.dataCell.onInit(cell);
                     }
-                    if (self.settings[j].dataCell.class) {
-                        cell.class = self.settings[j].dataCell.class(cell.data);
+                    if (setting.dataCell.class) {
+                        cell.class = setting.dataCell.class(cell.data);
                     }
                     row.pushCell(cell);
                 }
@@ -271,10 +291,18 @@ function Table(options) {
         return column;
     };
 
-    this.getColumnCount = function () {
-        return self.body.length;
-    }
+}
 
+function formatDate(date) {
+    let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let day = date.getDate();
+    let monthIndex = date.getMonth();
+    let year = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let hourStr = hours >= 10 ? hours : '0'+ hours;
+    let minutesStr = minutes >= 10 ? minutes : '0'+ minutes;
+    return day + ' ' + monthNames[monthIndex] + ' ' + year + ' ' + hourStr + ':' + minutesStr;
 }
 
 
@@ -282,7 +310,7 @@ module.component('simpleTable', {
     css: 'table/css/table.css',
     templateUrl: 'table/table.template.html',
     controller: ['$scope', '$timeout', '$http', '$q', function simpleTableController($scope, $timeout, $http, $q) {
-        var self = this;
+        let self = this;
         this.table = $scope.$parent.table;
         $http.get(this.table.options.schemaUrl).then(function (response) {
             self.table.loadSettings(response.data.properties);
