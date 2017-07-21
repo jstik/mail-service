@@ -4,10 +4,11 @@ import java.io.IOException;
 
 import javax.jws.WebService;
 
+import com.utill.ApplicationContextProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.config.ApplicationContextProvider;
+
 import com.mail.MailManager;
 import com.mail.MailManagerImpl;
 import com.model.Mail;

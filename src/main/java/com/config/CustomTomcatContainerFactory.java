@@ -4,6 +4,7 @@ import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.ContextResource;
+import org.apache.tomcat.util.http.LegacyCookieProcessor;
 import org.springframework.boot.context.embedded.EmbeddedServletContainer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
@@ -40,6 +41,7 @@ public class CustomTomcatContainerFactory extends TomcatEmbeddedServletContainer
 
     @Override
     protected void postProcessContext(Context context) {
+        context.setCookieProcessor(new LegacyCookieProcessor());
         ContextResource resource = new ContextResource();
         resource.setName("jdbc/mainDB");
         resource.setType(com.zaxxer.hikari.HikariDataSource.class.getName());

@@ -49,7 +49,7 @@ public class MailListener {
                         Mail mail = (Mail) message.getBody();
                         MailItem item = MailItem.createMailItem(mail);
                         try {
-                            item = mailItemRepository.save(item);
+                               item = mailItemRepository.save(item);
                         } catch (Throwable e) {
                             logger.error("Couldn't save to Db", e);
                         }

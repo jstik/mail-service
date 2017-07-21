@@ -34,6 +34,7 @@ public class MailItem extends AbstractEntity implements Identifiable, Serializab
     private String subject;
 
     @JsonView(value = {View.Details.class})
+    @Column(name = "body", columnDefinition ="NCLOB" )
     private String body;
 
     private String cc;

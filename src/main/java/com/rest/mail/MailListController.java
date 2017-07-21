@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.rest.View;
+import com.rest.OAuth2Util;
+import com.utill.CookieUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonGenerationException;
@@ -15,11 +15,7 @@ import org.codehaus.jackson.node.ArrayNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.dao.MailItemRepository;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -34,6 +30,8 @@ import com.rest.filter.FilterUtil;
 
 import javassist.NotFoundException;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Created by Julia on 22.06.2017.
  */
@@ -46,11 +44,16 @@ public class MailListController {
 	private JsonManager jsonManager;
 
 	@Autowired
-	MailManager mailManager;
+	private MailManager mailManager;
 
 	@RequestMapping("/")
-	public Object showMailList() {
-		return "/index.html";
+	public Object showMailList(HttpServletResponse response) {
+		String token = OAuth2Util.tokenValue();
+		if (token != null) {
+			//String tokenStr = String.join(" ", OAuth2Util.tokenType(), token);
+			CookieUtil.create(response, "Authorization", token, false, -1, null, false);
+		}
+		return "/index";
 	}
 
 	@RequestMapping(value = "/mails/schema/schema.json")

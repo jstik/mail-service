@@ -1,4 +1,4 @@
-package com.model.entity.converters;
+package com.converters;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

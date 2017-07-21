@@ -84,6 +84,8 @@ public class  Mail implements Serializable {
 
     @JsonIgnore
     public String getCommaSeparatedCC(){
+        if(this.cc == null)
+            return "";
         return String.join(",", Arrays.asList(cc));
     }
 
