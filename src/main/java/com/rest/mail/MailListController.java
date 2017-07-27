@@ -3,10 +3,15 @@ package com.rest.mail;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.config.SwaggerConfig;
 import com.rest.OAuth2Util;
 import com.utill.CookieUtil;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+import io.swagger.annotations.AuthorizationScope;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonGenerationException;
@@ -46,23 +51,34 @@ public class MailListController {
 	@Autowired
 	private MailManager mailManager;
 
-	@RequestMapping("/")
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@ApiOperation(value = "Entry point for loading index.htm",
+			authorizations = {@Authorization(value = SwaggerConfig.securitySchemaOAuth2, scopes =
+					{@AuthorizationScope( scope = SwaggerConfig.authorizationScopeGlobal,
+							description = SwaggerConfig.authorizationScopeGlobalDesc)})})
 	public Object showMailList(HttpServletResponse response) {
 		String token = OAuth2Util.tokenValue();
 		if (token != null) {
-			//String tokenStr = String.join(" ", OAuth2Util.tokenType(), token);
 			CookieUtil.create(response, "Authorization", token, false, -1, null, false);
 		}
 		return "/index";
 	}
 
-	@RequestMapping(value = "/mails/schema/schema.json")
+	@RequestMapping(value = "/mails/schema/schema.json", method = RequestMethod.GET)
+	@ApiOperation(value = "Return Json schema for mail item",
+			authorizations = {@Authorization(value = SwaggerConfig.securitySchemaOAuth2, scopes =
+					{@AuthorizationScope( scope = SwaggerConfig.authorizationScopeGlobal,
+							description = SwaggerConfig.authorizationScopeGlobalDesc)})})
 	public @ResponseBody Object generateMailSchema() throws JsonMappingException {
 		return jsonManager.generateSchema(MailItem.class);
 	}
 
 
-	@RequestMapping(value = "/mails/mails.json")
+	@RequestMapping(value = "/mails/mails.json", method = RequestMethod.GET)
+	@ApiOperation(value = "Return mail list with given filtering",
+			authorizations = {@Authorization(value = SwaggerConfig.securitySchemaOAuth2, scopes =
+					{@AuthorizationScope( scope = SwaggerConfig.authorizationScopeGlobal,
+							description = SwaggerConfig.authorizationScopeGlobalDesc)})})
 	public @ResponseBody Object getMails(@RequestParam(name = "filter") String filter,
 								  @RequestParam(name = "page") int page) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -75,7 +91,7 @@ public class MailListController {
 				logger.error("Couldn't create predicate", e);
 				return null;
 			}
-		}).filter(ex -> ex != null).collect(Collectors.toList());
+		}).filter(Objects::nonNull).collect(Collectors.toList());
 		PageRequest pageable = new PageRequest(page, 30);
 		Iterable<MailItem> all;
 		if (predicates.isEmpty()) {
@@ -89,6 +105,10 @@ public class MailListController {
 	}
 
 	@RequestMapping(value = "/mails/delete", method = RequestMethod.POST)
+	@ApiOperation(value = "Delete Mail",
+			authorizations = {@Authorization(value = SwaggerConfig.securitySchemaOAuth2, scopes =
+					{@AuthorizationScope( scope = SwaggerConfig.authorizationScopeGlobal,
+							description = SwaggerConfig.authorizationScopeGlobalDesc)})})
 	public @ResponseBody Object removeMail(@RequestBody List<Long> ids) {
 		if (ids.isEmpty())
 			return false;
@@ -98,9 +118,11 @@ public class MailListController {
 	}
 
 	@RequestMapping(value = "/mails/resend", method = RequestMethod.GET)
-	public @ResponseBody Object resend(@RequestParam(name = "id") Long id) throws NotFoundException,
-			JsonGenerationException,
-			org.codehaus.jackson.map.JsonMappingException, IOException {
+	@ApiOperation(value = "Resend Mail",
+			authorizations = {@Authorization(value = SwaggerConfig.securitySchemaOAuth2, scopes =
+					{@AuthorizationScope( scope = SwaggerConfig.authorizationScopeGlobal,
+							description = SwaggerConfig.authorizationScopeGlobalDesc)})})
+	public @ResponseBody Object resend(@RequestParam(name = "id") Long id) throws NotFoundException, IOException {
 		MailItem mail = mailItemRepository.findOne(id);
 		if (mail == null)
 			throw new NotFoundException("Couldn't find mail item with id = " + id);

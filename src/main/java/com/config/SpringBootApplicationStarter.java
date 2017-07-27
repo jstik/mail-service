@@ -21,6 +21,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
@@ -46,15 +48,19 @@ import java.util.List;
 @EnableJpaRepositories(value = "com.dao.*")
 @EntityScan(value = "com.model.entity.*")
 @PropertySource(value = {"classpath:project.properties"})
-
+@EnableDiscoveryClient
 public class SpringBootApplicationStarter {
     @Autowired
     @Qualifier("pooledConnectionFactory")
     PooledConnectionFactory pooledConnectionFactory;
     @Resource
-    public Environment env;
+    private Environment env;
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
 
     public static void main(String[] args) {
+
         Endpoint.publish("http://localhost:9999/ws/mailSender", new MailServiceImpl());
         SpringApplication.run(SpringBootApplicationStarter.class, args);
     }

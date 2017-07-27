@@ -1,5 +1,6 @@
 package com.mail;
 
+import com.elastic.service.MailService;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -22,6 +23,8 @@ import com.model.Mail;
 import com.model.entity.MailItem;
 import com.model.entity.MailStatus;
 
+import java.util.ArrayList;
+
 /**
  * Created by Julia on 08.06.2017.
  */
@@ -35,6 +38,9 @@ public class MailListener {
     MailItemRepository mailItemRepository;
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private MailService elasticMailService;
 
     @Bean
     public RouteBuilder saveMailToDb() throws Exception {
@@ -50,6 +56,7 @@ public class MailListener {
                         MailItem item = MailItem.createMailItem(mail);
                         try {
                                item = mailItemRepository.save(item);
+                            elasticMailService.save(item, new ArrayList<>());
                         } catch (Throwable e) {
                             logger.error("Couldn't save to Db", e);
                         }

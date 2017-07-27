@@ -22,6 +22,7 @@ public class MailItem extends AbstractEntity implements Identifiable, Serializab
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+
     private Long id;
 
     @Column(name = "m_from")
@@ -53,9 +54,6 @@ public class MailItem extends AbstractEntity implements Identifiable, Serializab
     @JsonIgnore
     @FilterObject(name = "status", targetFieldName = "status")
     private MailStatus mailStatus;
-
-    @Transient
-    private boolean test;
 
     public static MailItem createMailItem(Mail mail) {
         MailItem item = new MailItem();
@@ -156,13 +154,5 @@ public class MailItem extends AbstractEntity implements Identifiable, Serializab
     @JsonProperty(value = "status")
     public MailStatus.Status getStatus(){
         return this.mailStatus.getStatus();
-    }
-
-    public boolean isTest() {
-        return test;
-    }
-
-    public void setTest(boolean test) {
-        this.test = test;
     }
 }
